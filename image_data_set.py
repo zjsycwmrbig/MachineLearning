@@ -37,9 +37,33 @@ def show_images(imgs, num_rows, num_cols, titles=None, scale=1.5):
 d2l.use_svg_display()
 
 # 下载数据集
-trans = transforms.ToTensor()
+# trans = transforms.ToTensor()
 # root表示数据集下载的路径 train表示是否为训练集 transform表示对数据集进行的操作 download表示是否需要下载
-mnist_train = torchvision.datasets.FashionMNIST(root="../data", train=True, transform=trans, download=True)
-mnist_test = torchvision.datasets.FashionMNIST(root="../data", train=False, transform=trans, download=True)
+# mnist_train = torchvision.datasets.FashionMNIST(root="../data", train=True, transform=trans, download=True)
+# mnist_test = torchvision.datasets.FashionMNIST(root="../data", train=False, transform=trans, download=True)
 
-print(len(mnist_train), len(mnist_test))
+# X, y = next(iter(data.DataLoader(mnist_train, batch_size=18)))
+# show_images(X.reshape(18, 28, 28), 2, 9, titles=get_fashion_mnist_labels(y))
+
+# 读取小批量数据
+# print(len(mnist_train), len(mnist_test))
+# batch_size = 256
+# # num_workers表示使用多进程来读取数据
+# train_iter = data.DataLoader(mnist_train, batch_size, shuffle=True, num_workers=4)
+# test_iter = data.DataLoader(mnist_test, batch_size, shuffle=False, num_workers=4)
+# timer = d2l.Timer()
+# for X, y in train_iter:
+#     continue
+# print(f'{timer.stop():.2f} sec')
+
+
+def load_data_fashion_mnist(batch_size, resize=None):
+    """下载Fashion-MNIST数据集 加载到内存中"""
+    trans = [transforms.ToTensor()]
+    if resize:
+        trans.insert(0, transforms.Resize(resize))
+    trans = transforms.Compose(trans)
+    mnist_train = torchvision.datasets.FashionMNIST(root="../data", train=True, transform=trans, download=True)
+    mnist_test = torchvision.datasets.FashionMNIST(root="../data", train=False, transform=trans, download=True)
+    return (data.DataLoader(mnist_train, batch_size, shuffle=True, num_workers=4),
+            data.DataLoader(mnist_test, batch_size, shuffle=False, num_workers=4))
