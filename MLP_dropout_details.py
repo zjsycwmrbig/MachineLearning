@@ -47,5 +47,5 @@ if '__main__' == __name__:
     train_iter, test_iter = d2l.load_data_fashion_mnist(batch_size)
     net = Net(num_inputs, num_outputs, num_hidden1, num_hidden2, True)
     trainer = torch.optim.SGD(net.parameters(), lr=lr)
-
+    # 这里 需要 jupyter notebook 支持
     train_ch3(net, train_iter, test_iter, loss, num_epochs, trainer)
